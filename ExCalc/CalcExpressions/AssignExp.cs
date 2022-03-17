@@ -49,6 +49,25 @@ namespace ExCalc
             return result;
         }
 
+        public static AssignSign ParseSign(string str)
+        {
+            switch (str)
+            {
+                case "=":
+                    return AssignSign.Neutral;
+                case "+=":
+                    return AssignSign.Add;
+                case "-=" :
+                    return AssignSign.Subtract;
+                case "*=":
+                    return AssignSign.Multiply;
+                case "/=":
+                    return AssignSign.Divide;
+                default:
+                    throw new ApplicationException("Not expected assign sign");
+            }
+        }
+
         public enum AssignSign
         {
             Neutral,

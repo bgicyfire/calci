@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Antlr4.Runtime;
+using ExCalc;
 
 namespace ExCalc
 {
@@ -11,22 +13,42 @@ namespace ExCalc
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Welcome to Calci parser!");
 
-            var parserSolver = new ParserSolver();
-            var aList = new Dictionary<string, int>();
-            parserSolver.ParseCalc("i = 0", aList);
-            parserSolver.ParseCalc("j = ++i", aList);
-            parserSolver.ParseCalc("x = i++ + 5", aList);
-            parserSolver.ParseCalc("y = 5 + 3 * 10", aList);
-            parserSolver.ParseCalc("i += y", aList);
+            try
+            {
+                string input = "i_9O9=8\nc=8\nc+=9\nn=(1+c)*2+3\n";
+                /*parserSolver.ParseCalc("i = 0", aList);
+                parserSolver.ParseCalc("j = ++i", aList);
+                parserSolver.ParseCalc("x = i++ + 5", aList);
+                parserSolver.ParseCalc("y = 5 + 3 * 10", aList);
+                parserSolver.ParseCalc("i += y", aList);*/
 
-            /*parserSolver.ParseCalc("i=9", aList);
-            parserSolver.ParseCalc("y=i++", aList);
-            parserSolver.ParseCalc("x =+++i", aList);*/
-            var matches = Regex.Matches("aRRRRb", "(a.*)(.*b)");
+                AntlrInputStream inputStream = new AntlrInputStream(input);
+                CalciLexer calciLexer = new CalciLexer(inputStream);
+                CommonTokenStream commonTokenStream = new CommonTokenStream(calciLexer);
+                CalciParser speakParser = new CalciParser(commonTokenStream);
+
+                CalciParser.SeqContext chatContext = speakParser.seq();
+                BasicCalciVisitor visitor = new BasicCalciVisitor();
+                visitor.Visit(chatContext);
+                
+
+                var vals = new Dictionary<string, int>();
+                foreach (var line in visitor.Lines)
+                {
+                    line.Calc(vals);
+                }
+
+                Console.WriteLine("(" + string.Join(", ", vals.Select(p => $"{p.Key}={p.Value}")) + ")");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex);
+            }
         }
     }
+
 
     public class Parser
     {
