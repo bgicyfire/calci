@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace ExCalc
 {
+    // This is a second solution, not needed in any way to the ANTRL grammar solution
     public class ParserSolver
     {
         private const string PAT_IDENTIFIER = "(?<iden>[A-z]+[A-z,0-9]*)";

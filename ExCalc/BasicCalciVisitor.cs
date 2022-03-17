@@ -11,10 +11,10 @@ namespace ExCalc
 
         public override CalcExp VisitLine(CalciParser.LineContext context)
         {
-            CalciParser.VarbContext variable = context.varb();
+            var variable = context.VARB().GetText();
             var right = Visit(context.add_sub());
             var assigner = context.ASSIGN_OP();
-            AssignExp line = new AssignExp(variable.GetText(), right, AssignExp.ParseSign(assigner.GetText()));
+            AssignExp line = new AssignExp(variable, right, AssignExp.ParseSign(assigner.GetText()));
             Lines.Add(line);
 
             return line;
@@ -46,23 +46,43 @@ namespace ExCalc
         {
             if (context.mul_div() == null)
             {
-                return Visit(context.atom());
+                return Visit(context.increment());
             }
 
             if (context.MUL_DIV_OP().GetText() == "*")
             {
                 var left = Visit(context.mul_div());
-                var right = Visit(context.atom());
+                var right = Visit(context.increment());
                 return new Multiply(left, right);
             }
 
             if (context.MUL_DIV_OP().GetText() == "/")
             {
                 var left = Visit(context.mul_div());
-                var right = Visit(context.atom());
+                var right = Visit(context.increment());
                 return new Divide(left, right);
             }
             throw new ApplicationException("Unexpected mul_div operator");
+        }
+        
+        public override CalcExp VisitPost_increment(CalciParser.Post_incrementContext context)
+        {
+            return new PostfixIncrement(context.VARB().GetText());
+        }
+
+        public override CalcExp VisitPre_increment(CalciParser.Pre_incrementContext context)
+        {
+            return new PrefixIncrement(context.VARB().GetText());
+        }
+
+        public override CalcExp VisitPost_decrement(CalciParser.Post_decrementContext context)
+        {
+            return new PostfixDecrement(context.VARB().GetText());
+        }
+
+        public override CalcExp VisitPre_decrement(CalciParser.Pre_decrementContext context)
+        {
+            return new PrefixDecrement(context.VARB().GetText());
         }
 
         public override CalcExp VisitAtom(CalciParser.AtomContext context)
@@ -70,13 +90,11 @@ namespace ExCalc
             if (context.NUMBB() != null)
             {
                 return  new NumberExp(int.Parse(context.NUMBB().GetText()));
-                //return Visit(context.NUMBB());
             }
 
             if (context.VARB() != null)
             {
                 return  new VariableExp( context.VARB().GetText());
-                //return Visit(context.VARB());
             }
 
             if (context.add_sub() != null)
@@ -84,11 +102,6 @@ namespace ExCalc
                  return Visit(context.add_sub());
             }
             throw new ApplicationException("Unexpected");
-        }
-
-        public override CalcExp VisitNum(CalciParser.NumContext context)
-        {
-            return base.VisitNum(context);
         }
     }
 }

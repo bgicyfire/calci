@@ -44,18 +44,6 @@ public interface ICalciVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLine([NotNull] CalciParser.LineContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="CalciParser.varb"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitVarb([NotNull] CalciParser.VarbContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="CalciParser.num"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitNum([NotNull] CalciParser.NumContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="CalciParser.add_sub"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -67,6 +55,36 @@ public interface ICalciVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMul_div([NotNull] CalciParser.Mul_divContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CalciParser.increment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIncrement([NotNull] CalciParser.IncrementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CalciParser.post_increment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPost_increment([NotNull] CalciParser.Post_incrementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CalciParser.pre_increment"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPre_increment([NotNull] CalciParser.Pre_incrementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CalciParser.post_decrement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPost_decrement([NotNull] CalciParser.Post_decrementContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="CalciParser.pre_decrement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPre_decrement([NotNull] CalciParser.Pre_decrementContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="CalciParser.atom"/>.
 	/// </summary>
